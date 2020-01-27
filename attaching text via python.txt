@@ -1,0 +1,46 @@
+import smtplib 
+from email.mime.multipart import MIMEMultipart 
+from email.mime.text import MIMEText 
+from email.mime.base import MIMEBase 
+from email import encoders 
+   
+fromaddr = "senders email address"
+toaddr = "receiver email address"
+   
+msg = MIMEMultipart() 
+    
+msg[‘senders email address'] = fromaddr 
+  
+msg[‘receiver email address'] = toaddr 
+   
+msg['Subject'] = "attachment"
+  
+body = "sent from python"
+
+msg.attach(MIMEText(body, 'plain')) 
+
+filename = "actin.fasta.txt"
+attachment = open("D:\\actin.fasta.txt", "rb") #location of the file.
+  
+p = MIMEBase('application', 'octet-stream') 
+  
+p.set_payload((attachment).read()) 
+  
+encoders.encode_base64(p) 
+   
+p.add_header('Content-Disposition', "attachment; filename= %s" % filename) 
+  
+msg.attach(p) 
+  
+s = smtplib.SMTP('smtp.gmail.com', 587) 
+  
+s.starttls() 
+  
+s.login(fromaddr, "enter your email password") 
+  
+text = msg.as_string() 
+  
+s.sendmail(fromaddr,toaddr,msg.as_string()) 
+  
+s.quit() 
+
